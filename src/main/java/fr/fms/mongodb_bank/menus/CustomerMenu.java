@@ -2,6 +2,7 @@ package fr.fms.mongodb_bank.menus;
 
 import fr.fms.mongodb_bank.entities.Customer;
 import fr.fms.mongodb_bank.services.CustomerService;
+import fr.fms.mongodb_bank.utils.ConsoleSelectionUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CustomerMenu {
             System.out.println("1. Create Customer");
             System.out.println("2. View Customers");
             System.out.println("3. Search Customer");
+            System.out.println("4. Modify a Customer");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -32,6 +34,7 @@ public class CustomerMenu {
                 case "1" -> createCustomer(scanner);
                 case "2" -> listCustomers();
                 case "3" -> searchCustomer(scanner);
+                case "4" -> updateCustomer(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice !\n");
             }
@@ -81,6 +84,34 @@ public class CustomerMenu {
                 System.out.printf("%s %s | %s%n",c.getLastName().toUpperCase(), c.getFirstName(), c.getAddress());
             }
         }
+    }
+
+    private void updateCustomer(Scanner scanner) {
+        System.out.println("\n---- Modify a Customer ---");
+
+        List<Customer> allCustomers = customerService.getAllCustomers();
+
+        Customer customer = ConsoleSelectionUtil.selectCustomer(scanner, allCustomers);
+        if (customer == null) return;
+
+        System.out.printf("New First Name (%s): ", customer.getFirstName());
+        String firstName = scanner.nextLine();
+        if (!firstName.trim().isEmpty()) customer.setFirstName(firstName);
+
+        System.out.printf("New Last Name (%s): ", customer.getLastName());
+        String lastName = scanner.nextLine();
+        if (!lastName.trim().isEmpty()) customer.setLastName(lastName);
+
+        System.out.printf("New Email (%s): ", customer.getEmail());
+        String email = scanner.nextLine();
+        if (!email.trim().isEmpty()) customer.setEmail(email);
+
+        System.out.printf("New Address (%s): ", customer.getAddress());
+        String address = scanner.nextLine();
+        if (!address.trim().isEmpty()) customer.setAddress(address);
+
+        customerService.updateCustomer(customer);
+        System.out.println("Customer updated");
     }
 
 
