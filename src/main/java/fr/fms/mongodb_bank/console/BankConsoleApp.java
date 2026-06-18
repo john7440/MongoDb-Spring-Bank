@@ -1,6 +1,6 @@
 package fr.fms.mongodb_bank.console;
 
-import fr.fms.mongodb_bank.repositories.CustomerRepository;
+import fr.fms.mongodb_bank.menus.CustomerMenu;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -9,15 +9,32 @@ import java.util.Scanner;
 @Component
 public class BankConsoleApp implements CommandLineRunner {
 
-    private final CustomerRepository customerRepository;
-    private final Scanner scanner;
+    private final CustomerMenu customerMenu;
 
-    public BankConsoleApp(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-        this.scanner = new Scanner(System.in);
+    public BankConsoleApp(CustomerMenu customerMenu) {
+        this.customerMenu = customerMenu;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+
+        Thread.sleep(500);
+
+        while (running) {
+            System.out.println("\n==== BANK OF AMERICA ====");
+            System.out.println("1. Customer Management");
+            System.out.println("0. Exit");
+            System.out.print("Your choice: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> customerMenu.displayMenu(scanner);
+                case "0" -> {System.out.println("Goodbye!");running = false;}
+                default -> System.out.println("Invalid choice");
+            }
+        }
     }
 }
