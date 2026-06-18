@@ -22,11 +22,15 @@ public class BankAccountService {
         return bankAccountRepository.findAll();
     }
 
-    public BankAccount updateAccount(BankAccount account) {
-        return bankAccountRepository.save(account);
+    public void updateAccount(BankAccount account) {
+        bankAccountRepository.save(account);
     }
 
-    public List<BankAccount> getAccountsByCustomer(String customerId) {
-        return bankAccountRepository.findByCustomerId(customerId);
+    public boolean deleteAccount(String id) {
+        if (bankAccountRepository.existsById(id)) {
+            bankAccountRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

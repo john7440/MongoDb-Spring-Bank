@@ -30,6 +30,7 @@ public class BankAccountMenu {
             System.out.println("1. Create Account");
             System.out.println("2. List all Accounts");
             System.out.println("3. Change Account Status");
+            System.out.println("4. Delete Account");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -39,6 +40,7 @@ public class BankAccountMenu {
                 case "1" -> createAccount(scanner);
                 case "2" -> listAccounts();
                 case "3" -> changeAccountStatus(scanner);
+                case "4" -> deleteAccount(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice");
             }
@@ -114,5 +116,20 @@ public class BankAccountMenu {
 
         bankAccountService.updateAccount(account);
         System.out.println("Status updated to " + account.getStatus());
+    }
+
+    private void deleteAccount(Scanner scanner) {
+        System.out.println("\n----- Delete an Account -----");
+        List<BankAccount> accounts = bankAccountService.getAllAccounts();
+        BankAccount account = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
+
+        if (account == null) return;
+
+        boolean deleted = bankAccountService.deleteAccount(account.getId());
+        if (deleted) {
+            System.out.println("Account deleted successfully");
+        } else {
+            System.out.println("Account not found");
+        }
     }
 }
