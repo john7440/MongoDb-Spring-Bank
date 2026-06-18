@@ -22,6 +22,7 @@ public class CustomerMenu {
             System.out.println("\n--- CUSTOMER MENU ---");
             System.out.println("1. Create Customer");
             System.out.println("2. View Customers");
+            System.out.println("3. Search Customer");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -30,6 +31,7 @@ public class CustomerMenu {
             switch (choice) {
                 case "1" -> createCustomer(scanner);
                 case "2" -> listCustomers();
+                case "3" -> searchCustomer(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice !\n");
             }
@@ -58,11 +60,26 @@ public class CustomerMenu {
         List<Customer> customers = customerService.getAllCustomers();
 
         if (customers.isEmpty()) {
-            System.out.println("No customers found.");
+            System.out.println("No customers found");
             return;
         }
         for (Customer c : customers) {
             System.out.printf("%s %s | %s%n",  c.getLastName().toUpperCase(), c.getFirstName(), c.getEmail());
+        }
+    }
+
+    private void searchCustomer(Scanner scanner) {
+        System.out.print("\nEnter Last Name (or part of it) to search: ");
+        String lastName = scanner.nextLine();
+
+        List<Customer> customers = customerService.searchCustomersByLastName(lastName);
+
+        if (customers.isEmpty()) {
+            System.out.println("No matching customers !");
+        } else {
+            for (Customer c : customers) {
+                System.out.printf("%s %s | %s%n",c.getLastName().toUpperCase(), c.getFirstName(), c.getAddress());
+            }
         }
     }
 

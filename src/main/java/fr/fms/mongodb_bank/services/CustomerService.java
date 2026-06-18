@@ -15,11 +15,15 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public void createCustomer(Customer customer) {
+        customerRepository.save(customer);
     }
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
+    }
+
+    public List<Customer> searchCustomersByLastName(String lastName) {
+        return customerRepository.findByLastNameContainingIgnoreCase(lastName);
     }
 }
