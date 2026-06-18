@@ -6,15 +6,18 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Document
-public class Customer {
+public class BankAccount {
     @Id
     private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String address;
+    private String accountNumber;
+    private double balance;
+    private LocalDate creationDate;
+    private AccountStatus status;
+    private String customerId;
 }
