@@ -25,6 +25,7 @@ public class CustomerMenu {
             System.out.println("2. View Customers");
             System.out.println("3. Search Customer");
             System.out.println("4. Modify a Customer");
+            System.out.println("5. Delete a Customer");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -35,6 +36,7 @@ public class CustomerMenu {
                 case "2" -> listCustomers();
                 case "3" -> searchCustomer(scanner);
                 case "4" -> updateCustomer(scanner);
+                case "5" -> deleteCustomer(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice !\n");
             }
@@ -114,5 +116,20 @@ public class CustomerMenu {
         System.out.println("Customer updated");
     }
 
+    private void deleteCustomer(Scanner scanner) {
+        System.out.println("\n--- Delete a Customer ----");
+
+        List<Customer> allCustomers = customerService.getAllCustomers();
+
+        Customer customer = ConsoleSelectionUtil.selectCustomer(scanner, allCustomers);
+        if (customer == null) return;
+
+        boolean deleted = customerService.deleteCustomer(customer.getId());
+        if (deleted) {
+            System.out.println("Customer deleted successfully");
+        } else {
+            System.out.println("Customer not found !");
+        }
+    }
 
 }

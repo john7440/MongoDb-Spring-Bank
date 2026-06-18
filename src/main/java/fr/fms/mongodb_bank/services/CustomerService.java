@@ -27,8 +27,8 @@ public class CustomerService {
         return customerRepository.findByLastNameContainingIgnoreCase(lastName);
     }
 
-    public Customer updateCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public void updateCustomer(Customer customer) {
+        customerRepository.save(customer);
     }
 
     public boolean deleteCustomer(String id) {

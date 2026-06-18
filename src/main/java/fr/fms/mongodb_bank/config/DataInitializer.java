@@ -65,7 +65,7 @@ public class DataInitializer {
 
             transactionRepo.saveAll(List.of(deposit, withdrawal, transfer));
 
-            System.out.println("Data successfully initialized !");
+            System.out.println("\nData successfully initialized !");
         };
     }
 }
