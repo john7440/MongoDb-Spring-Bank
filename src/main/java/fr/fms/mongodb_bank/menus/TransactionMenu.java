@@ -39,6 +39,7 @@ public class TransactionMenu {
             switch (choice) {
                 case "1" -> performDeposit(scanner);
                 case "2" -> performWithdrawal(scanner);
+                case "3" -> performTransfer(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice !");
             }
@@ -74,6 +75,35 @@ public class TransactionMenu {
 
         boolean success = transactionService.performWithdrawal(account.getId(), amount, fee);
         if (success) System.out.println("Withdrawal successful!");
+        else System.out.println("Insufficient funds or error");
+    }
+
+    private void performTransfer(Scanner scanner) {
+        System.out.println("\n--- Make a Transfer ---");
+        List<BankAccount> accounts = bankAccountService.getAllAccounts();
+
+        System.out.println("[1/2] Select SOURCE Account:");
+        BankAccount source = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
+        if (source == null) return;
+
+        System.out.println("\n[2/2] Select DESTINATION Account:");
+        BankAccount dest = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
+        if (dest == null) return;
+
+        if (source.getId().equals(dest.getId())) {
+            System.out.println("Source and destination cannot be the same");
+            return;
+        }
+
+        System.out.println("Available Balance: " + source.getBalance() + "€");
+
+        double amount = InputUtil.readPositiveDouble(scanner, "Amount to transfer : ");
+
+        System.out.print("Reason for transfer: ");
+        String reason = scanner.nextLine();
+
+        boolean success = transactionService.performTransfer(source.getId(), dest.getId(), amount, reason);
+        if (success) System.out.println("Transfer successful!");
         else System.out.println("Insufficient funds or error");
     }
 }

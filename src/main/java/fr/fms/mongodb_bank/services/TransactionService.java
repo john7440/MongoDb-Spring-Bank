@@ -2,6 +2,7 @@ package fr.fms.mongodb_bank.services;
 
 import fr.fms.mongodb_bank.entities.BankAccount;
 import fr.fms.mongodb_bank.entities.Deposit;
+import fr.fms.mongodb_bank.entities.Transfer;
 import fr.fms.mongodb_bank.entities.Withdrawal;
 import fr.fms.mongodb_bank.repositories.BankAccountRepository;
 import fr.fms.mongodb_bank.repositories.TransactionRepository;
@@ -64,5 +65,32 @@ public class TransactionService {
         return true;
     }
 
+    public boolean performTransfer(String sourceId, String destId, double amount, String reason) {
+        Optional<BankAccount> optSource = bankAccountRepository.findById(sourceId);
+        Optional<BankAccount> optDest = bankAccountRepository.findById(destId);
+
+        if (optSource.isEmpty() || optDest.isEmpty()) return false;
+
+        BankAccount source = optSource.get();
+        BankAccount dest = optDest.get();
+
+        if (source.getBalance() < amount) return false;
+
+        source.setBalance(source.getBalance() - amount);
+        dest.setBalance(dest.getBalance() + amount);
+        bankAccountRepository.save(source);
+        bankAccountRepository.save(dest);
+
+        Transfer transfer = new Transfer();
+        transfer.setSourceAccountId(sourceId);
+        transfer.setDestinationAccountId(destId);
+        transfer.setAmount(amount);
+        transfer.setTransactionDate(LocalDateTime.now());
+        transfer.setDescription("Transfer");
+        transfer.setReason(reason);
+        transactionRepository.save(transfer);
+
+        return true;
+    }
 
 }
