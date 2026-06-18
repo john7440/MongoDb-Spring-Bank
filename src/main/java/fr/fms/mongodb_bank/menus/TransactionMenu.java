@@ -29,6 +29,8 @@ public class TransactionMenu {
         while (!back) {
             System.out.println("\n---- OPERATIONS MENU ----");
             System.out.println("1. Deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Transfer");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -36,8 +38,9 @@ public class TransactionMenu {
 
             switch (choice) {
                 case "1" -> performDeposit(scanner);
+                case "2" -> performWithdrawal(scanner);
                 case "0" -> back = true;
-                default -> System.out.println("Invalid choice.");
+                default -> System.out.println("Invalid choice !");
             }
         }
     }
@@ -56,5 +59,21 @@ public class TransactionMenu {
         boolean success = transactionService.performDeposit(account.getId(), amount, method);
         if (success) System.out.println("Deposit successful");
         else System.out.println("Error during deposit");
+    }
+
+    private void performWithdrawal(Scanner scanner) {
+        System.out.println("\n--- Make a Withdrawal ---");
+        List<BankAccount> accounts = bankAccountService.getAllAccounts();
+        BankAccount account = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
+        if (account == null) return;
+
+        System.out.println("Available Balance: " + account.getBalance() + "€");
+
+        double amount = InputUtil.readPositiveDouble(scanner, "Amount to withdraw: ");
+        double fee = InputUtil.readPositiveDouble(scanner, "Fee (0 if none) : ");
+
+        boolean success = transactionService.performWithdrawal(account.getId(), amount, fee);
+        if (success) System.out.println("Withdrawal successful!");
+        else System.out.println("Insufficient funds or error");
     }
 }
