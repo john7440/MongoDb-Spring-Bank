@@ -28,6 +28,7 @@ public class BankAccountMenu {
         while (!back) {
             System.out.println("\n--- ACCOUNT MENU ---");
             System.out.println("1. Create Account");
+            System.out.println("2. List all Accounts");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -35,6 +36,7 @@ public class BankAccountMenu {
 
             switch (choice) {
                 case "1" -> createAccount(scanner);
+                case "2" -> listAccounts();
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice");
             }
@@ -66,4 +68,23 @@ public class BankAccountMenu {
         System.out.println("Account created successfully for " + customer.getLastName() +  customer.getFirstName() + "!");
     }
 
+    private void listAccounts() {
+        System.out.println("\n--- List of Accounts ---");
+        List<BankAccount> accounts = bankAccountService.getAllAccounts();
+
+        if (accounts.isEmpty()) {
+            System.out.println("No accounts found");
+            return;
+        }
+
+        for (BankAccount acc : accounts) {
+            String ownerName = "Unknown";
+            Customer owner = customerService.getCustomerById(acc.getCustomerId());
+            if (owner != null) {
+                ownerName = owner.getFirstName() + " " + owner.getLastName().toUpperCase();
+            }
+            System.out.printf("%s | Balance: %.2f€ | Status: %s | Owner: %s%n",
+                    acc.getAccountNumber(), acc.getBalance(), acc.getStatus(), ownerName);
+        }
+    }
 }

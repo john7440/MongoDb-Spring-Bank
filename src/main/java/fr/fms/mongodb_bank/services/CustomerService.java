@@ -23,6 +23,10 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Customer getCustomerById(String id) {
+        return customerRepository.findById(id).orElse(null);
+    }
+
     public List<Customer> searchCustomersByLastName(String lastName) {
         return customerRepository.findByLastNameContainingIgnoreCase(lastName);
     }

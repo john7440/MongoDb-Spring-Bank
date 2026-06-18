@@ -4,6 +4,8 @@ import fr.fms.mongodb_bank.entities.BankAccount;
 import fr.fms.mongodb_bank.repositories.BankAccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BankAccountService {
     private final BankAccountRepository bankAccountRepository;
@@ -12,7 +14,11 @@ public class BankAccountService {
         this.bankAccountRepository = bankAccountRepository;
     }
 
-    public BankAccount createAccount(BankAccount account) {
-        return bankAccountRepository.save(account);
+    public void createAccount(BankAccount account) {
+        bankAccountRepository.save(account);
+    }
+
+    public List<BankAccount> getAllAccounts() {
+        return bankAccountRepository.findAll();
     }
 }
