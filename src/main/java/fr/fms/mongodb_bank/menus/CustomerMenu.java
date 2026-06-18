@@ -4,6 +4,7 @@ import fr.fms.mongodb_bank.entities.Customer;
 import fr.fms.mongodb_bank.services.CustomerService;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -20,6 +21,7 @@ public class CustomerMenu {
         while (!back) {
             System.out.println("\n--- CUSTOMER MENU ---");
             System.out.println("1. Create Customer");
+            System.out.println("2. View Customers");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -27,6 +29,7 @@ public class CustomerMenu {
 
             switch (choice) {
                 case "1" -> createCustomer(scanner);
+                case "2" -> listCustomers();
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice !\n");
             }
@@ -48,6 +51,19 @@ public class CustomerMenu {
 
         customerService.createCustomer(customer);
         System.out.println("Customer created successfully !\n");
+    }
+
+    private void listCustomers() {
+        System.out.println("\n--- List of Customers ---");
+        List<Customer> customers = customerService.getAllCustomers();
+
+        if (customers.isEmpty()) {
+            System.out.println("No customers found.");
+            return;
+        }
+        for (Customer c : customers) {
+            System.out.printf("%s %s | %s%n",  c.getLastName().toUpperCase(), c.getFirstName(), c.getEmail());
+        }
     }
 
 

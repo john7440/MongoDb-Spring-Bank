@@ -4,6 +4,8 @@ import fr.fms.mongodb_bank.entities.Customer;
 import fr.fms.mongodb_bank.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerService {
 
@@ -13,8 +15,11 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public void createCustomer(Customer customer) {
-        customerRepository.save(customer);
+    public Customer createCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
 
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
+    }
 }
