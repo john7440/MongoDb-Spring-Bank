@@ -29,6 +29,7 @@ public class BankAccountMenu {
             System.out.println("\n--- ACCOUNT MENU ---");
             System.out.println("1. Create Account");
             System.out.println("2. List all Accounts");
+            System.out.println("3. Change Account Status");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -37,6 +38,7 @@ public class BankAccountMenu {
             switch (choice) {
                 case "1" -> createAccount(scanner);
                 case "2" -> listAccounts();
+                case "3" -> changeAccountStatus(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice");
             }
@@ -86,5 +88,31 @@ public class BankAccountMenu {
             System.out.printf("%s | Balance: %.2f€ | Status: %s | Owner: %s%n",
                     acc.getAccountNumber(), acc.getBalance(), acc.getStatus(), ownerName);
         }
+    }
+
+    private void changeAccountStatus(Scanner scanner) {
+        System.out.println("\n--- Change Account Status ---");
+        List<BankAccount> accounts = bankAccountService.getAllAccounts();
+        BankAccount account = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
+
+        if (account == null) return;
+
+        System.out.println("Current Status: " + account.getStatus());
+        System.out.println("1. ACTIVE");
+        System.out.println("2. SUSPENDED");
+        System.out.println("3. CLOSED");
+        System.out.print("Select new status (or 0 to cancel): ");
+
+        String choice = scanner.nextLine();
+        switch (choice) {
+            case "1" -> account.setStatus(AccountStatus.ACTIVE);
+            case "2" -> account.setStatus(AccountStatus.SUSPENDED);
+            case "3" -> account.setStatus(AccountStatus.CLOSED);
+            case "0" -> { return; }
+            default -> {System.out.println("Invalid choice");return;}
+        }
+
+        bankAccountService.updateAccount(account);
+        System.out.println("Status updated to " + account.getStatus());
     }
 }

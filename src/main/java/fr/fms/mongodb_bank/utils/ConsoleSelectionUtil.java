@@ -28,7 +28,7 @@ public class ConsoleSelectionUtil {
         return (index == -1) ? null : customers.get(index);
     }
 
-    private static int askForIndex(Scanner scanner, int listSize) {
+    public static int askForIndex(Scanner scanner, int listSize) {
         System.out.print("\nEnter the number (or 0 to cancel): ");
         String input = scanner.nextLine();
 
@@ -48,7 +48,7 @@ public class ConsoleSelectionUtil {
         }
     }
 
-    private static BankAccount selectBankAccount(Scanner scanner, List<BankAccount> accounts, CustomerService  customerService) {
+    public static BankAccount selectBankAccount(Scanner scanner, List<BankAccount> accounts, CustomerService customerService) {
         if (accounts == null || accounts.isEmpty()) {
             System.out.println("No accounts found");
             return null;
