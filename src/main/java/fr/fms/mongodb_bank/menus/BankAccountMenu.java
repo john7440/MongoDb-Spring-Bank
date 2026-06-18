@@ -6,6 +6,7 @@ import fr.fms.mongodb_bank.entities.Customer;
 import fr.fms.mongodb_bank.services.BankAccountService;
 import fr.fms.mongodb_bank.services.CustomerService;
 import fr.fms.mongodb_bank.utils.ConsoleSelectionUtil;
+import fr.fms.mongodb_bank.utils.InputUtil;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -59,13 +60,7 @@ public class BankAccountMenu {
         System.out.print("Account Number (e.g., US123456789): ");
         String accNumber = scanner.nextLine();
 
-        double balance = 0.0;
-        System.out.print("Initial Balance: ");
-        try {
-            balance = Double.parseDouble(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid amount format ! Setting balance to 0.0");
-        }
+        double balance = InputUtil.readPositiveDouble(scanner, "Initial Balance: ");
 
         BankAccount account = new BankAccount(null, accNumber, balance, LocalDate.now(), AccountStatus.ACTIVE, customer.getId());
         bankAccountService.createAccount(account);
