@@ -26,4 +26,16 @@ public class CustomerService {
     public List<Customer> searchCustomersByLastName(String lastName) {
         return customerRepository.findByLastNameContainingIgnoreCase(lastName);
     }
+
+    public Customer updateCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    public boolean deleteCustomer(String id) {
+        if (customerRepository.existsById(id)) {
+            customerRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
