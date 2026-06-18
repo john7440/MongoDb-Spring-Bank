@@ -1,11 +1,16 @@
 package fr.fms.mongodb_bank.utils;
 
+import fr.fms.mongodb_bank.entities.BankAccount;
 import fr.fms.mongodb_bank.entities.Customer;
+import fr.fms.mongodb_bank.services.CustomerService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleSelectionUtil {
+    private ConsoleSelectionUtil() {
+        /* This utility class should not be instantiated */
+    }
 
     public static Customer selectCustomer(Scanner scanner, List<Customer> customers) {
         if (customers == null || customers.isEmpty()) {
@@ -42,4 +47,27 @@ public class ConsoleSelectionUtil {
             return -1;
         }
     }
+
+    private static BankAccount selectBankAccount(Scanner scanner, List<BankAccount> accounts, CustomerService  customerService) {
+        if (accounts == null || accounts.isEmpty()) {
+            System.out.println("No accounts found");
+            return null;
+        }
+        System.out.println("\n--- Select an Account ---");
+        for (int i = 0; i < accounts.size(); i++) {
+            BankAccount acc = accounts.get(i);
+
+            String ownerName = "Unknown";
+            Customer owner = customerService.getCustomerById(acc.getCustomerId());
+            if (owner != null) {
+                ownerName = owner.getFirstName() + " " + owner.getLastName().toUpperCase();
+            }
+            System.out.printf("%d. %s | Balance: %.2f | Owner: %s%n",
+                    (i + 1), acc.getAccountNumber(), acc.getBalance(), ownerName);
+        }
+
+        int index = askForIndex(scanner, accounts.size());
+        return (index == -1) ? null : accounts.get(index);
+    }
 }
+

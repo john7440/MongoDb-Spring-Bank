@@ -21,4 +21,12 @@ public class BankAccountService {
     public List<BankAccount> getAllAccounts() {
         return bankAccountRepository.findAll();
     }
+
+    public BankAccount updateAccount(BankAccount account) {
+        return bankAccountRepository.save(account);
+    }
+
+    public List<BankAccount> getAccountsByCustomer(String customerId) {
+        return bankAccountRepository.findByCustomerId(customerId);
+    }
 }
