@@ -3,6 +3,9 @@ package fr.fms.mongodb_bank.utils;
 import java.util.Scanner;
 
 public class InputUtil {
+    private InputUtil() {
+        /* This utility class should not be instantiated */
+    }
 
     public static double readDouble(Scanner scanner, String prompt) {
         while (true) {
