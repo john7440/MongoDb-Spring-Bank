@@ -1,6 +1,6 @@
 package fr.fms.mongodb_bank.menus;
 
-import fr.fms.mongodb_bank.entities.BankAccount;
+import fr.fms.mongodb_bank.entities.*;
 import fr.fms.mongodb_bank.services.BankAccountService;
 import fr.fms.mongodb_bank.services.CustomerService;
 import fr.fms.mongodb_bank.services.TransactionService;
@@ -8,6 +8,7 @@ import fr.fms.mongodb_bank.utils.ConsoleSelectionUtil;
 import fr.fms.mongodb_bank.utils.InputUtil;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,6 +32,7 @@ public class TransactionMenu {
             System.out.println("1. Deposit");
             System.out.println("2. Withdraw");
             System.out.println("3. Transfer");
+            System.out.println("4. View all transactions");
             System.out.println("0. Back to Main Menu");
             System.out.print("Your choice: ");
 
@@ -40,6 +42,7 @@ public class TransactionMenu {
                 case "1" -> performDeposit(scanner);
                 case "2" -> performWithdrawal(scanner);
                 case "3" -> performTransfer(scanner);
+                case "4" -> viewHistory(scanner);
                 case "0" -> back = true;
                 default -> System.out.println("Invalid choice !");
             }
@@ -105,5 +108,39 @@ public class TransactionMenu {
         boolean success = transactionService.performTransfer(source.getId(), dest.getId(), amount, reason);
         if (success) System.out.println("Transfer successful!");
         else System.out.println("Insufficient funds or error");
+    }
+
+    private void viewHistory(Scanner scanner) {
+        System.out.println("\n--- Account History ---");
+        List<BankAccount> accounts = bankAccountService.getAllAccounts();
+        BankAccount account = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
+        if (account == null) return;
+
+        List<Transaction> history = transactionService.getAccountHistory(account.getId());
+
+        System.out.println("\n======= TRANSACTION HISTORY =======");
+        if (history.isEmpty()) {
+            System.out.println("No transactions found for this account.");
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            for (Transaction t : history) {
+                String dateStr = t.getTransactionDate().format(formatter);
+
+                if (t instanceof Deposit d) {
+                    System.out.printf("[%s]DEPOSIT  : +%.2f€ (Method: %s)%n", dateStr, d.getAmount(), d.getPaymentMethod());
+                }
+                else if (t instanceof Withdrawal w) {
+                    System.out.printf("[%s] WITHDRAW : -%.2f€ (Fee: %.2f€)%n", dateStr, w.getAmount(), w.getFee());
+                }
+                else if (t instanceof Transfer tr) {
+                    if (tr.getSourceAccountId().equals(account.getId())) {
+                        System.out.printf("[%s]OUTGOING TRANSFER : -%.2f€ (Reason: %s)%n", dateStr, tr.getAmount(), tr.getReason());
+                    } else {
+                        System.out.printf("[%s]INCOMING TRANSFER : +%.2f€ (Reason: %s)%n", dateStr, tr.getAmount(), tr.getReason());
+                    }
+                }
+            }
+        }
+        System.out.println("==================================");
     }
 }

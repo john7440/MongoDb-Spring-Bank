@@ -1,14 +1,12 @@
 package fr.fms.mongodb_bank.services;
 
-import fr.fms.mongodb_bank.entities.BankAccount;
-import fr.fms.mongodb_bank.entities.Deposit;
-import fr.fms.mongodb_bank.entities.Transfer;
-import fr.fms.mongodb_bank.entities.Withdrawal;
+import fr.fms.mongodb_bank.entities.*;
 import fr.fms.mongodb_bank.repositories.BankAccountRepository;
 import fr.fms.mongodb_bank.repositories.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,4 +91,7 @@ public class TransactionService {
         return true;
     }
 
+    public List<Transaction> getAccountHistory(String accountId) {
+        return transactionRepository.findAccountHistory(accountId);
+    }
 }
