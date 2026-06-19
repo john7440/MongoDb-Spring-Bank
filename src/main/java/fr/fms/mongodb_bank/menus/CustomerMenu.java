@@ -81,8 +81,8 @@ public class CustomerMenu {
     }
 
     private void searchCustomer(Scanner scanner) {
-        System.out.print("\nEnter Last Name (or part of it) to search: ");
-        String lastName = scanner.nextLine();
+        String lastName = promptUntilValid(scanner, "\nLast Name to search",
+                input -> !input.isBlank(), "Search term cannot be empty");
 
         List<Customer> customers = customerService.searchCustomersByLastName(lastName);
 
