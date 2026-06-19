@@ -23,6 +23,7 @@ public class DataInitializer {
             accountRepo.deleteAll();
             customerRepo.deleteAll();
 
+            //-----------------------customers ------------------------------
             Customer jonald = new Customer(null, "Jonald", "Drump", "dj.drump@ormuz.us",
                     "Washington");
             Customer pratt = new Customer(null, "Pratt", "Bide",
@@ -32,6 +33,7 @@ public class DataInitializer {
 
             customerRepo.saveAll(List.of(jonald,pratt, nuck));
 
+            //------------------- bank accounts ------------------------------------
             BankAccount accountJonald = new BankAccount(null, "US123456789", 7000000000.50,
                     LocalDate.now(), AccountStatus.ACTIVE, jonald.getId());
             BankAccount accountPratt = new BankAccount(null, "US987654321", 57000000.26,
@@ -41,6 +43,7 @@ public class DataInitializer {
 
             accountRepo.saveAll(List.of(accountJonald, accountPratt,accountNuck));
 
+            //--------------------------deposit-----------------------------
             Deposit deposit = new Deposit();
             deposit.setAmount(557.26);
             deposit.setTransactionDate(LocalDateTime.now());
@@ -48,6 +51,9 @@ public class DataInitializer {
             deposit.setSourceAccountId(accountJonald.getId());
             deposit.setPaymentMethod("Cash");
 
+            accountJonald.setBalance(accountJonald.getBalance() + deposit.getAmount());
+
+            //------------------------withdrawal---------------------
             Withdrawal withdrawal = new Withdrawal();
             withdrawal.setAmount(79.90);
             withdrawal.setTransactionDate(LocalDateTime.now());
@@ -55,6 +61,9 @@ public class DataInitializer {
             withdrawal.setSourceAccountId(accountPratt.getId());
             withdrawal.setFee(1.50);
 
+            accountPratt.setBalance(accountPratt.getBalance() - withdrawal.getAmount() - withdrawal.getFee());
+
+            //------------------ transfer---------------------------------
             Transfer transfer = new Transfer();
             transfer.setAmount(2000000.0);
             transfer.setTransactionDate(LocalDateTime.now());
@@ -63,7 +72,12 @@ public class DataInitializer {
             transfer.setDestinationAccountId(accountNuck.getId());
             transfer.setReason("Bribery");
 
+            accountJonald.setBalance(accountJonald.getBalance() - transfer.getAmount());
+            accountNuck.setBalance(accountNuck.getBalance() + transfer.getAmount());
+
+            //------------------save-----------------------------
             transactionRepo.saveAll(List.of(deposit, withdrawal, transfer));
+            accountRepo.saveAll(List.of(accountJonald, accountPratt, accountNuck));
 
             System.out.println("\nData successfully initialized !");
         };
