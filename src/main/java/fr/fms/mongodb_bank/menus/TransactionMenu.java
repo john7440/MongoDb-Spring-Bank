@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
+import static fr.fms.mongodb_bank.utils.InputUtil.promptUntilValid;
+
 @Component
 public class TransactionMenu {
 
@@ -59,8 +61,9 @@ public class TransactionMenu {
 
         double amount = InputUtil.readPositiveDouble(scanner, "Amount to deposit: ");
 
-        System.out.print("Payment Method (Cash, Check, Bitcoin...): ");
-        String method = scanner.nextLine();
+        String method = promptUntilValid(scanner, "Payment Method (Cash, Check, Bitcoin...)",
+                input -> !input.isBlank() && input.length() >= 2,
+                "Payment method cannot be empty");
 
         boolean success = transactionService.performDeposit(account.getId(), amount, method);
         if (success) System.out.println("Deposit successful");
@@ -106,8 +109,9 @@ public class TransactionMenu {
 
         double amount = InputUtil.readPositiveDouble(scanner, "Amount to transfer : ");
 
-        System.out.print("Reason for transfer: ");
-        String reason = scanner.nextLine();
+        String reason = promptUntilValid(scanner, "Reason for transfer",
+                input -> !input.isBlank() && input.length() >= 3,
+                "Reason cannot be empty");
 
         boolean success = transactionService.performTransfer(source.getId(), dest.getId(), amount, reason);
         if (success) System.out.println("Transfer successful!");
