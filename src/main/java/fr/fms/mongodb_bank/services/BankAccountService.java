@@ -1,10 +1,12 @@
 package fr.fms.mongodb_bank.services;
 
+import fr.fms.mongodb_bank.entities.AccountStatus;
 import fr.fms.mongodb_bank.entities.BankAccount;
 import fr.fms.mongodb_bank.repositories.BankAccountRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankAccountService {
@@ -30,10 +32,26 @@ public class BankAccountService {
 
     //-------------------------- delete -----------------
     public boolean deleteAccount(String id) {
-        if (bankAccountRepository.existsById(id)) {
-            bankAccountRepository.deleteById(id);
-            return true;
+        Optional<BankAccount> opt = bankAccountRepository.findById(id);
+        if (opt.isEmpty()) return false;
+
+        BankAccount account = opt.get();
+
+        if (account.getBalance() > 0) {
+            throw new IllegalStateException(
+                    "Cannot delete account with positive balance (%.2f€)! Please withdraw first"
+                            .formatted(account.getBalance()));
         }
-        return false;
+
+        if (account.getStatus() == AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Cannot delete an ACTIVE account! Suspend or close it first !");
+        }
+
+        bankAccountRepository.deleteById(id);
+        return true;
+    }
+
+    public List<BankAccount> getAccountsByCustomerId(String customerId) {
+        return bankAccountRepository.findByCustomerId(customerId);
     }
 }
