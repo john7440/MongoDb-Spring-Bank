@@ -40,4 +40,15 @@ public class InputUtil {
             System.out.println(errorMessage + "! Please try again !");
         }
     }
+
+    public static String promptOptional(Scanner scanner, String fieldName, String currentValue,
+                                  java.util.function.Predicate<String> rule, String errorMessage) {
+        while (true) {
+            System.out.printf("New %s (%s): ", fieldName, currentValue);
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) return currentValue;
+            if (rule.test(input)) return input;
+            System.out.println(errorMessage + "! Please try again");
+        }
+    }
 }
