@@ -28,4 +28,16 @@ public class InputUtil {
             System.out.println("The amount cannot be negative ! Please try again");
         }
     }
+
+     public static String promptUntilValid(Scanner scanner, String fieldName,
+                                           java.util.function.Predicate<String> rule, String errorMessage) {
+        while (true) {
+            System.out.print(fieldName + ": ");
+            String input = scanner.nextLine().trim();
+            if (rule.test(input)) {
+                return input;
+            }
+            System.out.println(errorMessage + "! Please try again !");
+        }
+    }
 }
