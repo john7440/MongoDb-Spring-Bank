@@ -25,6 +25,7 @@ public class TransactionMenu {
         this.customerService = customerService;
     }
 
+    //----------------------transaction menu---------------------
     public void displayMenu(Scanner scanner) {
         boolean back = false;
         while (!back) {
@@ -49,6 +50,7 @@ public class TransactionMenu {
         }
     }
 
+    //--------------------Deposit -----------------------
     private void performDeposit(Scanner scanner) {
         System.out.println("\n--- Make a Deposit ---");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();
@@ -65,6 +67,7 @@ public class TransactionMenu {
         else System.out.println("Error during deposit");
     }
 
+    //------------------------- withdrawal------------------------
     private void performWithdrawal(Scanner scanner) {
         System.out.println("\n--- Make a Withdrawal ---");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();
@@ -81,6 +84,7 @@ public class TransactionMenu {
         else System.out.println("Insufficient funds or error");
     }
 
+    //---------------------transfer-------------------
     private void performTransfer(Scanner scanner) {
         System.out.println("\n--- Make a Transfer ---");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();
@@ -110,6 +114,7 @@ public class TransactionMenu {
         else System.out.println("Insufficient funds or error");
     }
 
+    //---------------------history --------------------
     private void viewHistory(Scanner scanner) {
         System.out.println("\n--- Account History ---");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();

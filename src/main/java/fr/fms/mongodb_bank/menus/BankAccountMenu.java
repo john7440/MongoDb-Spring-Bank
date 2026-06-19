@@ -24,6 +24,7 @@ public class BankAccountMenu {
         this.customerService = customerService;
     }
 
+    //------------------------bank account menu--------------------------
     public void displayMenu(Scanner scanner) {
         boolean back = false;
         while (!back) {
@@ -48,6 +49,7 @@ public class BankAccountMenu {
         }
     }
 
+    //------------------- create ---------------------------
     private void createAccount(Scanner scanner) {
         System.out.println("\n---- Create a new Account ----");
 
@@ -67,6 +69,7 @@ public class BankAccountMenu {
         System.out.println("Account created successfully for " + customer.getLastName() +  customer.getFirstName() + "!");
     }
 
+    //---------------------- read all-------------------------
     private void listAccounts() {
         System.out.println("\n--- List of Accounts ---");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();
@@ -87,6 +90,7 @@ public class BankAccountMenu {
         }
     }
 
+    //------------------ update status--------------------------
     private void changeAccountStatus(Scanner scanner) {
         System.out.println("\n--- Change Account Status ---");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();
@@ -113,6 +117,7 @@ public class BankAccountMenu {
         System.out.println("Status updated to " + account.getStatus());
     }
 
+    //----------------------delete-----------------
     private void deleteAccount(Scanner scanner) {
         System.out.println("\n----- Delete an Account -----");
         List<BankAccount> accounts = bankAccountService.getAllAccounts();

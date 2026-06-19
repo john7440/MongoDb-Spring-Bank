@@ -20,6 +20,7 @@ public class CustomerMenu {
         this.customerService = customerService;
     }
 
+    //-----------------------customer menu-------------------------
     public void displayMenu(Scanner scanner) {
         boolean back = false;
         while (!back) {
@@ -46,6 +47,7 @@ public class CustomerMenu {
         }
     }
 
+    //------------------- create---------------------
     private void createCustomer(Scanner scanner) {
         System.out.println("\n---- Create a new Customer ---");
 
@@ -68,6 +70,7 @@ public class CustomerMenu {
         System.out.println("Customer created successfully !\n");
     }
 
+    //----------------------read all----------------
     private void listCustomers() {
         System.out.println("\n--- List of Customers ---");
         List<Customer> customers = customerService.getAllCustomers();
@@ -81,6 +84,7 @@ public class CustomerMenu {
         }
     }
 
+    //-----------------search ------------------------
     private void searchCustomer(Scanner scanner) {
         String lastName = promptUntilValid(scanner, "\nLast Name to search",
                 input -> !input.isBlank(), "Search term cannot be empty");
@@ -96,6 +100,7 @@ public class CustomerMenu {
         }
     }
 
+    //----------------- update --------------------------
     private void updateCustomer(Scanner scanner) {
         System.out.println("\n---- Modify a Customer ---");
 
@@ -121,6 +126,7 @@ public class CustomerMenu {
         System.out.println("Customer updated");
     }
 
+    //------------------------delete----------------------
     private void deleteCustomer(Scanner scanner) {
         System.out.println("\n--- Delete a Customer ----");
 
