@@ -135,11 +135,12 @@ public class BankAccountMenu {
             return;
         }
 
-        boolean deleted = bankAccountService.deleteAccount(account.getId());
-        if (deleted) {
-            System.out.println("Account deleted successfully");
-        } else {
-            System.out.println("Account not found");
+        try {
+            boolean deleted = bankAccountService.deleteAccount(account.getId());
+            if (deleted) System.out.println("Account deleted successfully");
+            else System.out.println("Account not found !");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
