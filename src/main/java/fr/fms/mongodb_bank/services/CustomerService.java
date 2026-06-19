@@ -18,26 +18,32 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    //---------------------------create-----------------------------------------
     public void createCustomer(@Valid Customer customer) {
         customerRepository.save(customer);
     }
 
+    //------------------------------ read all-----------------------------------
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
+    //------------------------------read by id ------------------------------------------
     public Customer getCustomerById(String id) {
         return customerRepository.findById(id).orElse(null);
     }
 
+    //---------------------------- search-------------------------------------------
     public List<Customer> searchCustomersByLastName(String lastName) {
         return customerRepository.findByLastNameContainingIgnoreCase(lastName);
     }
 
+    //------------------------------update----------------------------
     public void updateCustomer(@Valid Customer customer) {
         customerRepository.save(customer);
     }
 
+    //---------------------------delete ----------------
     public boolean deleteCustomer(String id) {
         if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);

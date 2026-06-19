@@ -13,19 +13,22 @@ public class BankAccountService {
     public BankAccountService(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;
     }
-
+    //---------------------create------------------------------------
     public void createAccount(BankAccount account) {
         bankAccountRepository.save(account);
     }
 
+    //------------------------ read all ---------------------------------------
     public List<BankAccount> getAllAccounts() {
         return bankAccountRepository.findAll();
     }
 
+    //------------------------ update-----------------------------------
     public void updateAccount(BankAccount account) {
         bankAccountRepository.save(account);
     }
 
+    //-------------------------- delete -----------------
     public boolean deleteAccount(String id) {
         if (bankAccountRepository.existsById(id)) {
             bankAccountRepository.deleteById(id);

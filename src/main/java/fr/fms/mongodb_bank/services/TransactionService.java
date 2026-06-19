@@ -20,6 +20,7 @@ public class TransactionService {
         this.bankAccountRepository = bankAccountRepository;
     }
 
+    //--------------------------------------deposit --------------------------------------
     public boolean performDeposit(String accountId, double amount, String paymentMethod) {
         Optional<BankAccount> optAccount = bankAccountRepository.findById(accountId);
         if (optAccount.isEmpty()) return false;
@@ -40,6 +41,7 @@ public class TransactionService {
         return true;
     }
 
+    //-----------------------------Withdrawal-------------------------------------
     public boolean performWithdrawal(String accountId, double amount, double fee) {
         Optional<BankAccount> optAccount = bankAccountRepository.findById(accountId);
         if (optAccount.isEmpty()) return false;
@@ -63,6 +65,7 @@ public class TransactionService {
         return true;
     }
 
+    //------------------------------transfer ----------------------------------------------------
     public boolean performTransfer(String sourceId, String destId, double amount, String reason) {
         Optional<BankAccount> optSource = bankAccountRepository.findById(sourceId);
         Optional<BankAccount> optDest = bankAccountRepository.findById(destId);
@@ -91,6 +94,7 @@ public class TransactionService {
         return true;
     }
 
+    //---------------------------history--------------------------
     public List<Transaction> getAccountHistory(String accountId) {
         return transactionRepository.findAccountHistory(accountId);
     }
