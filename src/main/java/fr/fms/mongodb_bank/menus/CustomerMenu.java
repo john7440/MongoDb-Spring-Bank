@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Scanner;
 
+import static fr.fms.mongodb_bank.utils.InputUtil.promptOptional;
 import static fr.fms.mongodb_bank.utils.InputUtil.promptUntilValid;
 
 @Component
@@ -103,21 +104,18 @@ public class CustomerMenu {
         Customer customer = ConsoleSelectionUtil.selectCustomer(scanner, allCustomers);
         if (customer == null) return;
 
-        System.out.printf("New First Name (%s): ", customer.getFirstName());
-        String firstName = scanner.nextLine();
-        if (!firstName.trim().isEmpty()) customer.setFirstName(firstName);
+        customer.setFirstName(promptOptional(scanner, "First Name", customer.getFirstName(),
+                input -> input.length() >= 3, "First name must be at least 3 characters"));
 
-        System.out.printf("New Last Name (%s): ", customer.getLastName());
-        String lastName = scanner.nextLine();
-        if (!lastName.trim().isEmpty()) customer.setLastName(lastName);
+        customer.setLastName(promptOptional(scanner, "Last Name", customer.getLastName(),
+                input -> input.length() >= 3, "Last name must be at least 3 characters"));
 
-        System.out.printf("New Email (%s): ", customer.getEmail());
-        String email = scanner.nextLine();
-        if (!email.trim().isEmpty()) customer.setEmail(email);
+        customer.setEmail(promptOptional(scanner, "Email", customer.getEmail(),
+                input -> input.matches("^[\\w.+-]+@[\\w-]+\\.[\\w.]+$"),
+                "Invalid email format"));
 
-        System.out.printf("New Address (%s): ", customer.getAddress());
-        String address = scanner.nextLine();
-        if (!address.trim().isEmpty()) customer.setAddress(address);
+        customer.setAddress(promptOptional(scanner, "Address", customer.getAddress(),
+                input -> !input.isBlank(), "Address cannot be empty"));
 
         customerService.updateCustomer(customer);
         System.out.println("Customer updated");
