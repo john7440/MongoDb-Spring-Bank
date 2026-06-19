@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import static fr.fms.mongodb_bank.utils.InputUtil.promptUntilValid;
+
 @Component
 public class BankAccountMenu {
 
@@ -59,14 +61,15 @@ public class BankAccountMenu {
 
         if (customer == null) return;
 
-        System.out.print("Account Number (e.g., US123456789): ");
-        String accNumber = scanner.nextLine();
+        String accNumber = promptUntilValid(scanner, "Account Number (e.g., US123456987)",
+                input -> input.matches("^[A-Z]{2}\\d{7,30}$"),
+                "Must start with 2 letters followed by 7-30 digits");
 
         double balance = InputUtil.readPositiveDouble(scanner, "Initial Balance: ");
 
         BankAccount account = new BankAccount(null, accNumber, balance, LocalDate.now(), AccountStatus.ACTIVE, customer.getId());
         bankAccountService.createAccount(account);
-        System.out.println("Account created successfully for " + customer.getLastName() +  customer.getFirstName() + "!");
+        System.out.println("Account created successfully for " + customer.getLastName() + " "  +customer.getFirstName() + "!");
     }
 
     //---------------------- read all-------------------------
