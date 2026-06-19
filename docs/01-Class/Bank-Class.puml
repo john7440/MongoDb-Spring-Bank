@@ -1,0 +1,58 @@
+@startuml
+
+title MongoDB - Bank
+
+abstract class Transaction {
+  # id : Long
+  # amount : double
+  # sourceAccountId : Long
+  # transactionDate : LocalDateTime
+  # description : String
+}
+
+class Deposit {
+  - paymentMethod : String
+}
+
+class Withdrawal {
+  - fee: double
+}
+
+class Transfer {
+  - destinationAccountId : Long
+  - reason : String
+}
+
+class BankAccount {
+  - id : Long
+  - numero_compte : String
+  - solde : double
+  - date_creation : LocalDate
+  - statut : StatutCompte
+  - client_id :Long
+}
+
+class Customer {
+  - id : Long
+  - firstName: String
+  - lastName: String
+  - email : String
+  - address : String
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+Transaction <|-- Deposit
+Transaction <|-- Withdrawal
+Transaction <|-- Transfer
+
+Customer "1" *-- "1..*" BankAccount : possess >
+BankAccount "1" *-- "0..*" Transaction : contains >
+
+BankAccount --> AccountStatus
+
+@enduml
