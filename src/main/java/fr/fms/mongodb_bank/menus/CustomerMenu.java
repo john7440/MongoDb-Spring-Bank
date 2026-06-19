@@ -142,11 +142,12 @@ public class CustomerMenu {
             return;
         }
 
-        boolean deleted = customerService.deleteCustomer(customer.getId());
-        if (deleted) {
-            System.out.println("Customer deleted successfully");
-        } else {
-            System.out.println("Customer not found !");
+        try {
+            boolean deleted = customerService.deleteCustomer(customer.getId());
+            if (deleted) System.out.println("Customer deleted successfully");
+            else System.out.println("Customer not found");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 
