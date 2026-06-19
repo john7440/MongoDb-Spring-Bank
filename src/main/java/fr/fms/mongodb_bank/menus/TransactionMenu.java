@@ -65,9 +65,13 @@ public class TransactionMenu {
                 input -> !input.isBlank() && input.length() >= 2,
                 "Payment method cannot be empty");
 
-        boolean success = transactionService.performDeposit(account.getId(), amount, method);
-        if (success) System.out.println("Deposit successful");
-        else System.out.println("Error during deposit");
+        try {
+            boolean success = transactionService.performDeposit(account.getId(), amount, method);
+            if (success) System.out.println("Deposit successful");
+            else System.out.println("Error during deposit");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //------------------------- withdrawal------------------------
@@ -82,9 +86,13 @@ public class TransactionMenu {
         double amount = InputUtil.readPositiveDouble(scanner, "Amount to withdraw: ");
         double fee = InputUtil.readPositiveDouble(scanner, "Fee (0 if none) : ");
 
-        boolean success = transactionService.performWithdrawal(account.getId(), amount, fee);
-        if (success) System.out.println("Withdrawal successful!");
-        else System.out.println("Insufficient funds or error");
+        try {
+            boolean success = transactionService.performWithdrawal(account.getId(), amount, fee);
+            if (success) System.out.println("Withdrawal successful");
+            else System.out.println("Insufficient funds or error");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //---------------------transfer-------------------
@@ -113,9 +121,13 @@ public class TransactionMenu {
                 input -> !input.isBlank() && input.length() >= 3,
                 "Reason cannot be empty");
 
-        boolean success = transactionService.performTransfer(source.getId(), dest.getId(), amount, reason);
-        if (success) System.out.println("Transfer successful!");
-        else System.out.println("Insufficient funds or error");
+        try {
+            boolean success = transactionService.performTransfer(source.getId(), dest.getId(), amount, reason);
+            if (success) System.out.println("Transfer successful");
+            else System.out.println("Insufficient funds or error!");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //---------------------history --------------------
