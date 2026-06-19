@@ -62,12 +62,12 @@ public class BankAccountMenu {
         if (customer == null) return;
 
         String accNumber = promptUntilValid(scanner, "Account Number (e.g., US123456987)",
-                input -> input.matches("^[A-Z]{2}\\d{7,30}$"),
+                input -> input.toUpperCase().matches("^[A-Z]{2}\\d{7,30}$"),
                 "Must start with 2 letters followed by 7-30 digits");
 
         double balance = InputUtil.readPositiveDouble(scanner, "Initial Balance: ");
 
-        BankAccount account = new BankAccount(null, accNumber, balance, LocalDate.now(), AccountStatus.ACTIVE, customer.getId());
+        BankAccount account = new BankAccount(null, accNumber.toUpperCase(), balance, LocalDate.now(), AccountStatus.ACTIVE, customer.getId());
         bankAccountService.createAccount(account);
         System.out.println("Account created successfully for " + customer.getLastName() + " "  +customer.getFirstName() + "!");
     }
@@ -127,6 +127,13 @@ public class BankAccountMenu {
         BankAccount account = ConsoleSelectionUtil.selectBankAccount(scanner, accounts, customerService);
 
         if (account == null) return;
+
+        System.out.printf("Confirm deletion of account %s? (Yes/No): ", account.getAccountNumber());
+        String confirm = scanner.nextLine().trim().toLowerCase();
+        if (!confirm.equals("yes")) {
+            System.out.println("Deletion cancelled");
+            return;
+        }
 
         boolean deleted = bankAccountService.deleteAccount(account.getId());
         if (deleted) {
