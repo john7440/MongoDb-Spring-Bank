@@ -135,6 +135,13 @@ public class CustomerMenu {
         Customer customer = ConsoleSelectionUtil.selectCustomer(scanner, allCustomers);
         if (customer == null) return;
 
+        System.out.printf("Confirm deletion of customer %s %s? (yes/no): ", customer.getLastName().toUpperCase(), customer.getFirstName());
+        String confirm = scanner.nextLine().trim().toLowerCase();
+        if (!confirm.equals("yes")) {
+            System.out.println("Deletion cancelled");
+            return;
+        }
+
         boolean deleted = customerService.deleteCustomer(customer.getId());
         if (deleted) {
             System.out.println("Customer deleted successfully");
