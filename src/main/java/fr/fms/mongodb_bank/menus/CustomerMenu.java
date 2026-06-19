@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Scanner;
 
+import static fr.fms.mongodb_bank.utils.InputUtil.promptUntilValid;
+
 @Component
 public class CustomerMenu {
 
@@ -45,14 +47,19 @@ public class CustomerMenu {
 
     private void createCustomer(Scanner scanner) {
         System.out.println("\n---- Create a new Customer ---");
-        System.out.print("First Name: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Last Name: ");
-        String lastName = scanner.nextLine();
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-        System.out.print("Address: ");
-        String address = scanner.nextLine();
+
+        String firstName = promptUntilValid(scanner, "First Name",
+                input -> !input.isBlank() && input.length() >= 3,
+                "First name must be at least 3 characters");
+        String lastName = promptUntilValid(scanner, "Last Name",
+                input -> !input.isBlank() && input.length() >= 3,
+                "Last name must be at least 3 characters");
+        String email = promptUntilValid(scanner, "Email",
+                input -> input.matches("^[\\w.+-]+@[\\w-]+\\.[\\w.]+$"),
+                "Invalid email format");
+        String address = promptUntilValid(scanner, "Address",
+                input -> !input.isBlank(),
+                "Address cannot be empty");
 
         Customer customer = new Customer(null, firstName, lastName, email, address);
 
