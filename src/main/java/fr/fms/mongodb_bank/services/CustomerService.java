@@ -2,11 +2,14 @@ package fr.fms.mongodb_bank.services;
 
 import fr.fms.mongodb_bank.entities.Customer;
 import fr.fms.mongodb_bank.repositories.CustomerRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
+@Validated
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -15,7 +18,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public void createCustomer(Customer customer) {
+    public void createCustomer(@Valid Customer customer) {
         customerRepository.save(customer);
     }
 
@@ -31,7 +34,7 @@ public class CustomerService {
         return customerRepository.findByLastNameContainingIgnoreCase(lastName);
     }
 
-    public void updateCustomer(Customer customer) {
+    public void updateCustomer(@Valid Customer customer) {
         customerRepository.save(customer);
     }
 
