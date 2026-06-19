@@ -27,6 +27,11 @@ public class TransactionService {
 
         BankAccount account = optAccount.get();
 
+        if (account.getStatus() != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Account is " + account.getStatus() +
+                    "! Only ACTIVE accounts can receive deposits");
+        }
+
         account.setBalance(account.getBalance() + amount);
         bankAccountRepository.save(account);
 
@@ -47,6 +52,12 @@ public class TransactionService {
         if (optAccount.isEmpty()) return false;
 
         BankAccount account = optAccount.get();
+
+        if (account.getStatus() != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Account is " + account.getStatus() +
+                    "! Withdrawals are not allowed!");
+        }
+
         double totalDeduction = amount + fee;
 
         if (account.getBalance() < totalDeduction) return false;
@@ -74,6 +85,13 @@ public class TransactionService {
 
         BankAccount source = optSource.get();
         BankAccount dest = optDest.get();
+
+        if (source.getStatus() != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Source account is " + source.getStatus() + "!");
+        }
+        if (dest.getStatus() != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Destination account is " + dest.getStatus() + "!");
+        }
 
         if (source.getBalance() < amount) return false;
 
